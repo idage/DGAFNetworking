@@ -145,6 +145,7 @@ extern NSString* const DG_NOTI_NETWORK_CHANGE;
  *  @param name       文件对应服务器上的字段名
  *  @param fileName   文件名
  *  @param mimeType   图片文件的类型
+ *  @param quality    t图片的压缩程度 (0-1)
  *  @param progress   上传进度信息
  *  @param success       成功回调
  *  @param failure       失败回调
@@ -157,6 +158,7 @@ extern NSString* const DG_NOTI_NETWORK_CHANGE;
                                         name:(NSString *)name
                                     fileName:(NSString *)fileName
                                     mimeType:(NSString *)mimeType
+                                         img:(CGFloat)quality
                                     progress:(void (^)(NSProgress *progress))progress
                                      success:(void (^)(id responseObject))success
                                      failure:(void (^)(id error))failure;

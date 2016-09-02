@@ -267,6 +267,7 @@ static  DGNetworkStatus _status;
                                name:(NSString *)name
                            fileName:(NSString *)fileName
                            mimeType:(NSString *)mimeType
+                                img:(CGFloat)quality
                            progress:(void (^)(NSProgress *progress))progress
                             success:(void (^)(id responseObject))success
                             failure:(void (^)(id error))failure
@@ -278,7 +279,7 @@ static  DGNetworkStatus _status;
         //压缩-添加-上传图片
         [images enumerateObjectsUsingBlock:^(UIImage * _Nonnull image, NSUInteger idx, BOOL * _Nonnull stop) {
             
-            NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
+            NSData *imageData = UIImageJPEGRepresentation(image, quality?quality:0.5);
             [formData appendPartWithFileData:imageData name:name fileName:[NSString stringWithFormat:@"%@%lu.%@",fileName,(unsigned long)idx,mimeType?mimeType:@"jpeg"] mimeType:[NSString stringWithFormat:@"image/%@",mimeType?mimeType:@"jpeg"]];
         }];
     } progress:^(NSProgress * _Nonnull uploadProgress) {
