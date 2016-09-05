@@ -73,6 +73,7 @@ durtion 是缓存的时间，单位是秒。如果请求和上次请求的时间
 这个类处理按时间缓存和按版本缓存的缓存配置，如果想添加新的缓存方式，可以再这个类里添加一个key.
 ######4、DGFileHandleFactory
 这个类处理一些数据存储的地址，如缓存配置文件的地址、网络下载数据的地址等。
-
-###四、鸣谢
+###四 提醒
+在使用缓存功能的时候 尽量把url拼接上用户的标识，否则在切换用户的时候会出现问题 
+###五、鸣谢
 DGAFNetWorking基于[AFNetworking](https://github.com/AFNetworking/AFNetworking)和[YYCache](https://github.com/ibireme/YYCache)完成。感谢他们对开源社区做出的贡献。
