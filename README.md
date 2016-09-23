@@ -32,12 +32,16 @@ DG_NOTI_NETWORK_CHANGE
 ```
 + (NSURLSessionTask *)GET:(NSString *)URL
                         parameters:(NSDictionary *)parameters
+                          cacheKey:(NSString*)cacheKey
+                   isResponseCache:(BOOL)isResponseCache
                      responseCache:(void (^)(id cacheObject))responseCache
                            success:(void (^)(id responseObject))success
                            failure:(void (^)(id error))failure;
 
 + (NSURLSessionTask *)POST:(NSString *)URL
                          parameters:(NSDictionary *)parameters
+                           cacheKey:(NSString*)cacheKey
+                    isResponseCache:(BOOL)isResponseCache
                       responseCache:(void (^)(id cacheObject))responseCache
                             success:(void (^)(id responseObject))success
                             failure:(void (^)(id error))failure;
@@ -49,6 +53,7 @@ durtion 是缓存的时间，单位是秒。如果请求和上次请求的时间
 ```
 + (void)GET:(NSString *)URL
                   parameters:(NSDictionary *)parameters
+                    cacheKey:(NSString*)cacheKey
                 versionCache:(NSString*)version
                 durtionCache:(NSInteger)durtion
                      success:(void (^)(id responseObject))success
@@ -56,6 +61,7 @@ durtion 是缓存的时间，单位是秒。如果请求和上次请求的时间
 
 + (void)POST:(NSString *)URL
                       parameters:(NSDictionary *)parameters
+                         cacheKey:(NSString*)cacheKey
                     versionCache:(NSString*)version
                     durtionCache:(NSInteger)durtion
                          success:(void (^)(id responseObject))success
