@@ -117,13 +117,15 @@ extern NSString* const DG_NOTI_NETWORK_CHANGE;
  *  根据版本 或者时间差来缓存数据 （版本相同或者没有超过时间差则返回缓存数据）
  *  @param URL            url
  *  @param parameters     请求参数
- *  @param version        是不是根据版本缓存
+ *  @param cacheKey       缓存的key 默认为url
+ *  @param version        是不是根据版本缓存(版本号)
  *  @param durtion        根据时间差缓存（以秒为单位 不根据时间传0）
  *  @param success        成功回调
  *  @param failure        失败回调
  */
 + (void)GET:(NSString *)URL
                   parameters:(NSDictionary *)parameters
+                    cacheKey:(NSString*)cacheKey
                 versionCache:(NSString*)version
                 durtionCache:(NSInteger)durtion
                      success:(void (^)(id responseObject))success
@@ -132,13 +134,15 @@ extern NSString* const DG_NOTI_NETWORK_CHANGE;
  *  根据版本 或者时间差来缓存数据 （版本相同或者没有超过时间差则返回缓存数据）
  *  @param URL            url
  *  @param parameters     请求参数
- *  @param version        是不是根据版本缓存
+ *  @param cacheKey       缓存的key 默认为url
+ *  @param version        是不是根据版本缓存(版本号)
  *  @param durtion        根据时间差缓存（以秒为单位 不根据时间传0）
  *  @param success        成功回调
  *  @param failure        失败回调
  */
 + (void)POST:(NSString *)URL
                       parameters:(NSDictionary *)parameters
+                        cacheKey:(NSString*)cacheKey
                     versionCache:(NSString*)version
                     durtionCache:(NSInteger)durtion
                          success:(void (^)(id responseObject))success

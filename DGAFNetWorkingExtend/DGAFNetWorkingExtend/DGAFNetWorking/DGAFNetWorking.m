@@ -158,11 +158,16 @@ static  DGNetworkStatus _status;
     
 }
 + (void)GET:(NSString *)URL
-                 parameters:(NSDictionary *)parameters
+                  parameters:(NSDictionary *)parameters
+                    cacheKey:(NSString*)cacheKey
                 versionCache:(NSString*)version
                 durtionCache:(NSInteger)durtion
-                    success:(void (^)(id responseObject))success
-                    failure:(void (^)(id error))failure{
+                     success:(void (^)(id responseObject))success
+                     failure:(void (^)(id error))failure{
+    
+    if (cacheKey==nil ||!cacheKey.length) {
+        cacheKey = URL;
+    }
     /**
      *  请求参数为：是否设置缓存配置文件  时间  版本
      */
@@ -176,10 +181,10 @@ static  DGNetworkStatus _status;
             success ? success(responseObject) : nil;
             
             //对数据进行缓存
-            [DGNetworkCache saveCacheData:responseObject forKey:URL];
+            [DGNetworkCache saveCacheData:responseObject forKey:cacheKey];
             //配置缓存配置文件
             if (isSetConfig) {
-                [DGCacheConfig setConfigApi:URL duration:currentTime versionStr:currentVersion];
+                [DGCacheConfig setConfigApi:cacheKey duration:currentTime versionStr:currentVersion];
             }
             
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -187,14 +192,14 @@ static  DGNetworkStatus _status;
         }];
         
     };
-    
+   
     //获取当前时间
     double currTime = [[NSDate date]timeIntervalSince1970];
     double nextTime = 0.0;
     //如果选择版本或者时间了
     if (version.length || durtion) {
         //获取配置
-        NSDictionary *configD = [DGCacheConfig getConfig:URL];
+        NSDictionary *configD = [DGCacheConfig getConfig:cacheKey];
         
         if (configD) {
             nextTime = [[configD valueForKey:CACHE_ITEM_DURATION] doubleValue];
@@ -207,7 +212,7 @@ static  DGNetworkStatus _status;
                 request(YES,currTime,version);
             }else{
                 //获取缓存
-                success ? success([DGNetworkCache getCacheDataForKey:URL]) : nil;
+                success ? success([DGNetworkCache getCacheDataForKey:cacheKey]) : nil;
             }
             
         }else{
@@ -222,10 +227,15 @@ static  DGNetworkStatus _status;
 }
 + (void)POST:(NSString *)URL
                       parameters:(NSDictionary *)parameters
+                        cacheKey:(NSString*)cacheKey
                     versionCache:(NSString*)version
                     durtionCache:(NSInteger)durtion
                          success:(void (^)(id responseObject))success
                          failure:(void (^)(id error))failure{
+   
+    if (cacheKey==nil ||!cacheKey.length) {
+        cacheKey = URL;
+    }
     /**
      *  请求参数为：是否设置缓存配置文件  时间  版本
      */
@@ -239,10 +249,10 @@ static  DGNetworkStatus _status;
             success ? success(responseObject) : nil;
             
             //对数据进行缓存
-            [DGNetworkCache saveCacheData:responseObject forKey:URL];
+            [DGNetworkCache saveCacheData:responseObject forKey:cacheKey];
             //配置缓存配置文件
             if (isSetConfig) {
-                [DGCacheConfig setConfigApi:URL duration:currentTime versionStr:currentVersion];
+                [DGCacheConfig setConfigApi:cacheKey duration:currentTime versionStr:currentVersion];
             }
             
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -257,7 +267,7 @@ static  DGNetworkStatus _status;
     //如果选择版本或者时间了
     if (version.length || durtion) {
         //获取配置
-        NSDictionary *configD = [DGCacheConfig getConfig:URL];
+        NSDictionary *configD = [DGCacheConfig getConfig:cacheKey];
         
         if (configD) {
             nextTime = [[configD valueForKey:CACHE_ITEM_DURATION] doubleValue];
@@ -270,7 +280,7 @@ static  DGNetworkStatus _status;
                 request(YES,currTime,version);
             }else{
                 //获取缓存
-                success ? success([DGNetworkCache getCacheDataForKey:URL]) : nil;
+                success ? success([DGNetworkCache getCacheDataForKey:cacheKey]) : nil;
             }
             
         }else{
