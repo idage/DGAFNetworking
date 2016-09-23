@@ -62,6 +62,8 @@ extern NSString* const DG_NOTI_NETWORK_CHANGE;
  *
  *  @param URL           url
  *  @param parameters    参数
+ *  @param cacheKey      缓存的key 默认为url
+ *  @param isResponseCache   是否有缓存的时候只返回缓存数据不再请求网络
  *  @param responseCache 缓存的数据
  *  @param success       成功回调
  *  @param failure       失败回调
@@ -69,10 +71,12 @@ extern NSString* const DG_NOTI_NETWORK_CHANGE;
  *  @return NSURLSessionTask
  */
 + (NSURLSessionTask *)GET:(NSString *)URL
-                        parameters:(NSDictionary *)parameters
-                     responseCache:(void (^)(id cacheObject))responseCache
-                           success:(void (^)(id responseObject))success
-                           failure:(void (^)(id error))failure;
+               parameters:(NSDictionary *)parameters
+                 cacheKey:(NSString*)cacheKey
+          isResponseCache:(BOOL)isResponseCache
+            responseCache:(void (^)(id cacheObject))responseCache
+                  success:(void (^)(id responseObject))success
+                  failure:(void (^)(id error))failure;
 
 /**
  *  POST请求
@@ -94,6 +98,8 @@ extern NSString* const DG_NOTI_NETWORK_CHANGE;
  *
  *  @param URL           url
  *  @param parameters    参数
+ *  @param cacheKey      缓存的key 默认为url
+ *  @param isResponseCache   是否有缓存的时候只返回缓存数据不再请求网络
  *  @param responseCache 缓存的数据
  *  @param success       成功回调
  *  @param failure       失败回调
@@ -102,6 +108,8 @@ extern NSString* const DG_NOTI_NETWORK_CHANGE;
  */
 + (NSURLSessionTask *)POST:(NSString *)URL
                          parameters:(NSDictionary *)parameters
+                           cacheKey:(NSString*)cacheKey
+                    isResponseCache:(BOOL)isResponseCache
                       responseCache:(void (^)(id cacheObject))responseCache
                             success:(void (^)(id responseObject))success
                             failure:(void (^)(id error))failure;

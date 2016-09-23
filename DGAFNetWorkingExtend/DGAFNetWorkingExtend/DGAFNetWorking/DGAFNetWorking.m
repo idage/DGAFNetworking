@@ -70,7 +70,7 @@ static  DGNetworkStatus _status;
                   success:(void (^)(id responseObject))success
                   failure:(void (^)(id error))failure
 {
-    return [self GET:URL parameters:parameters responseCache:nil success:success failure:failure];
+    return [self GET:URL parameters:parameters cacheKey:nil isResponseCache:NO  responseCache:nil success:success failure:failure];
 }
 
 
@@ -79,17 +79,28 @@ static  DGNetworkStatus _status;
                    success:(void (^)(id responseObject))success
                    failure:(void (^)(id error))failure
 {
-    return [self POST:URL parameters:parameters responseCache:nil success:success failure:failure];
+    return [self POST:URL parameters:parameters cacheKey:nil isResponseCache:NO  responseCache:nil success:success failure:failure];
 }
 
 + (NSURLSessionTask *)GET:(NSString *)URL
                parameters:(NSDictionary *)parameters
+                 cacheKey:(NSString*)cacheKey
+          isResponseCache:(BOOL)isResponseCache
             responseCache:(void (^)(id cacheObject))responseCache
                   success:(void (^)(id responseObject))success
                   failure:(void (^)(id error))failure
 {
-    //获取缓存
-    responseCache ? responseCache([DGNetworkCache getCacheDataForKey:URL]) : nil;
+    if (cacheKey==nil ||!cacheKey.length) {
+        cacheKey = URL;
+    }
+    
+    id  cahceData = [DGNetworkCache getCacheDataForKey:cacheKey];
+    //获取缓存 先返回换粗 再去请求
+    responseCache ? responseCache(cahceData) : nil;
+    //如果只返回缓存数据就不请求网络了
+    if (isResponseCache && cahceData !=nil) {
+        return nil;
+    }
     
     AFHTTPSessionManager *manager = [self setUpAFHTTPSessionManager];
     return [manager GET:URL parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -98,7 +109,7 @@ static  DGNetworkStatus _status;
         
         success ? success(responseObject) : nil;
         //如果需要缓存则设置缓存
-        responseCache ? [DGNetworkCache saveCacheData:responseObject forKey:URL] : nil;
+        responseCache ? [DGNetworkCache saveCacheData:responseObject forKey:cacheKey] : nil;
         
        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -111,12 +122,23 @@ static  DGNetworkStatus _status;
 
 + (NSURLSessionTask *)POST:(NSString *)URL
                 parameters:(NSDictionary *)parameters
+                  cacheKey:(NSString*)cacheKey
+           isResponseCache:(BOOL)isResponseCache
              responseCache:(void (^)(id cacheObject))responseCache
                    success:(void (^)(id responseObject))success
                    failure:(void (^)(id error))failure
 {
+    if (cacheKey==nil ||!cacheKey.length) {
+        cacheKey = URL;
+    }
+    
+    id  cahceData = [DGNetworkCache getCacheDataForKey:cacheKey];
     //获取缓存 先返回换粗 再去请求
-    responseCache ? responseCache([DGNetworkCache getCacheDataForKey:URL]) : nil;
+    responseCache ? responseCache(cahceData) : nil;
+    //如果只返回缓存数据就不请求网络了
+    if (isResponseCache && cahceData !=nil) {
+        return nil;
+    }
     
     AFHTTPSessionManager *manager = [self setUpAFHTTPSessionManager];
     return [manager POST:URL parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -125,7 +147,7 @@ static  DGNetworkStatus _status;
         
         success ? success(responseObject) : nil;
         // 如果需要缓存则设置缓存
-        responseCache ? [DGNetworkCache saveCacheData:responseObject forKey:URL] : nil;
+        responseCache ? [DGNetworkCache saveCacheData:responseObject forKey:cacheKey] : nil;
         
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
